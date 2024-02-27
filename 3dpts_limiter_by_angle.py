@@ -6,6 +6,7 @@ import numpy as np
 from ouster import client
 from ouster.client import LidarMode
 
+hostname = 'os1-000000000'
 
 import argparse
 from contextlib import closing
@@ -66,7 +67,7 @@ def filter_3d_by_range_and_azimuth(hostname: str,
                                    lidar_port: int = 7502,
                                    range_min: int = 2) -> None:
     """Easily filter 3D Point Cloud by Range and Azimuth Using the 2D Representation
-
+    
     Args:
         hostname: hostname of sensor
         lidar_port: UDP port to listen on for lidar data
@@ -106,8 +107,8 @@ def filter_3d_by_range_and_azimuth(hostname: str,
     xyz_filtered = xyz_destaggered * (range_destaggered[:, :, np.newaxis] >
                                       (range_min * 1000))
 
-    # get first 3/4 of scan
-    to_col = math.floor(metadata.mode.cols * 3 / 4)
+    # get first 2/4 of scan
+    to_col = math.floor(metadata.mode.cols * 2 / 4)
     xyz_filtered = xyz_filtered[:, 0:to_col, :]
     # [doc-etag-filter-3d]
 
@@ -117,10 +118,12 @@ def filter_3d_by_range_and_azimuth(hostname: str,
 
 def main() -> None :
     try:
-        filter_3d_by_range_and_azimuth,
+        filter_3d_by_range_and_azimuth(hostname)
     except KeyboardInterrupt:
-        print(f"No such example:")
         exit(1)
     
+if __name__ == "__main__":
+    main()
+
     
 

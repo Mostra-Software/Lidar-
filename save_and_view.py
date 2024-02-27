@@ -7,7 +7,9 @@ Ouster Open3D visualizer
 import time
 from more_itertools import consume, nth
 import numpy as np
+import os
 
+dir_name= 'pcd_data'
 try:
     import open3d as o3d  # type: ignore
 except ModuleNotFoundError:
@@ -194,9 +196,10 @@ def viewer_3d(scans: client.Scans, paused: bool = False) -> None:
     cloud = o3d.geometry.PointCloud()
     image = create_canvas(metadata.format.columns_per_frame,
                           metadata.format.pixels_per_column)
+    
 
     def save_pcl_data(vis: o3d.visualization.Visualizer):
-        pcl_save_path = f"frame_{scan.frame_id}.pcd"
+        pcl_save_path = f"{dir_name}/"f"frame_{scan.frame_id}.pcd"
         o3d.io.write_point_cloud(pcl_save_path, cloud)
         print(f"Saved point cloud to {pcl_save_path}")
 
